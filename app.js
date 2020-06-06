@@ -7,11 +7,46 @@ const PLATFORMS = [
     { id: 6, name: "PC (Microsoft Windows)" },
     { id: 49, name: "Xbox One" }
   ];
+const URL = "https://bip17.csb.app/games.json";
+const searchBtn = document.getElementById('searchBtn');
+const searchInput = document.getElementById('search-input');
+const platformInput = document.getElementById('platform-select');
+const gamesList = document.getElementById('games-holder');
+let games ; 
+searchBtn.addEventListener('click', e => {
+    e.preventDefault();
+    fetch("games.json")
+    .then(response => response.json())
+    .then(games => filterGames(games))
+})
+
+//function to filter the games and store it in an array according to the inputs and send it to another function to display it 
+
+function filterGames(gamesArray){
+    const filteredGamesArray = gamesArray.filter(game => {
+        const input = searchInput.value.toLowerCase();
+        const platform = platformInput.value;
+        const gameName = game.name.toLowerCase();
+        return (platform === "-1") ? game && gameName.includes(input) : game.platforms.includes(parseInt(platform)) && gameName.includes(input)
+    })
+    displayGames(filteredGamesArray);
+}
+//function to display the filterd games
+function displayGames(filteredGamesArray){
+    gamesList.innerHTML = "";
+    filteredGamesArray.forEach(game => {
+        const gameItem = document.createElement('p');
+        gameItem.innerText = `${game.name}`
+        gamesList.appendChild(gameItem);
+    })
+}
+
+//function to show number of games in each platform
+    
 
 
 
-
-  /*
+/*
 Instructions:
 You have a 1000 game, all of them fall into thse platforms
 Implement the search functionality
@@ -44,6 +79,4 @@ platfomrs attribute of each game for example:
   platforms: [6, 48, 9]
 }
 
-so make sure to consider it in all platforms
-
-*/
+so make sure to consider it in all platforms*/
