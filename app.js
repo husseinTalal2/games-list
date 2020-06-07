@@ -13,7 +13,7 @@ const searchInput = document.getElementById('search-input');
 const platformInput = document.getElementById('platform-select');
 const gamesList = document.getElementById('games-holder');
 const gameSummary = document.getElementById('summary-list');
-let games ; 
+
 searchBtn.addEventListener('click', e => {
     e.preventDefault();
     fetch("games.json")
@@ -43,27 +43,29 @@ function displayGames(filteredGamesArray){
 }
 
 //function to show number of games in each platform
-
+let summary ;
 function platformSummary(){
     platformsNumberOfGames = {};
     fetch("games.json")
     .then(response => response.json())
     .then(games => {
-        games.reduce((acc, game) => {
+        summary = games.reduce((acc, game) => {
             game.platforms.forEach(platform => {
                 if(!acc.hasOwnProperty(platform))
                     acc[platform] = 0;
                 acc[platform]++;
             })
             return acc;
-        }, platformsNumberOfGames)
+        }, {})
+        PLATFORMS.forEach(platform => {
+            const id = platform.id;  
+            const name = platform.name;
+            const li = document.createElement('li');
+            li.insertAdjacentHTML('beforeend', `${name} <strong>${summary[id]}</strong>`);
+            gameSummary.appendChild(li);
+        })
     })
-    console.log(platformsNumberOfGames)
-    displayGamesSummary(platformsNumberOfGames);
 } 
-function displayGamesSummary(numberOfGamesArray){
-
-}
 platformSummary();
 
 
