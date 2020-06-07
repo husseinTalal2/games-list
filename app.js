@@ -14,15 +14,7 @@ const platformInput = document.getElementById('platform-select');
 const gamesList = document.getElementById('games-holder');
 const gameSummary = document.getElementById('summary-list');
 
-searchBtn.addEventListener('click', e => {
-    e.preventDefault();
-    fetch("games.json")
-    .then(response => response.json())
-    .then(games => filterGames(games))
-})
-
 //function to filter the games and store it in an array according to the inputs and send it to another function to display it 
-
 function filterGames(gamesArray){
     const filteredGamesArray = gamesArray.filter(game => {
         const input = searchInput.value.toLowerCase();
@@ -32,6 +24,7 @@ function filterGames(gamesArray){
     })
     displayGames(filteredGamesArray);
 }
+
 //function to display the filterd games
 function displayGames(filteredGamesArray){
     gamesList.innerHTML = "";
@@ -66,9 +59,14 @@ function platformSummary(){
         })
     })
 } 
-platformSummary();
-
-
+    searchBtn.addEventListener('click', e => {
+        e.preventDefault();
+        fetch("games.json")
+        .then(response => response.json())
+        .then(games => filterGames(games))
+    })
+    platformSummary();
+      
 /*
 Instructions:
 You have a 1000 game, all of them fall into thse platforms
